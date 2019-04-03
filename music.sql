@@ -4,13 +4,13 @@ IS211
 Music Database
 */
 
-CREATE TABLE artist 
+CREATE TABLE IF NOT EXISTS artist 
   ( 
      artist_id   INTEGER PRIMARY KEY, 
      artist_name TEXT NOT NULL 
   ); 
 
-CREATE TABLE album 
+CREATE TABLE IF NOT EXISTS album 
   ( 
      album_id   INTEGER PRIMARY KEY, 
      album_name TEXT NOT NULL, 
@@ -18,7 +18,7 @@ CREATE TABLE album
      FOREIGN KEY (artist_id) REFERENCES artist(artist_id) 
   ); 
 
-CREATE TABLE songs 
+CREATE TABLE IF NOT EXISTS songs 
   ( 
      song_id      INTEGER PRIMARY KEY, 
      song_name    TEXT NOT NULL, 
