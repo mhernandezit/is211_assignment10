@@ -1,26 +1,41 @@
 """ Creates the DB Schema for the pets database """
 import sqlite3
-from sqlite3 import Error
+from sqlite3 import OperationalError
 
 def create_connection(db_file):
     """ Creates connection to SQLite db """
     try:
         conn = sqlite3.connect(db_file)
         return conn
-    except Error as connection_error:
+    except OperationalError as connection_error:
         print connection_error
     return None
+
+def reset_db(conn, tables):
+    """ Reset function - drops all tables from the DB """
+    for table in tables:
+        try:
+            cur = conn.cursor()
+            cur.execute('DROP TABLE IF EXISTS {}'.format(table))
+        except OperationalError as execute_error:
+            print execute_error
+    return cur.lastrowid
+
 
 def create_table(conn, sql_string):
     """ Create a new table from the passed sql string """
     try:
         sql_cursor = conn.cursor()
         sql_cursor.execute(sql_string)
-    except Error as execution_error:
+    except OperationalError as execution_error:
         print execution_error
 
-if __name__ == "__main__":
-    PERSON_TABLE = """
+def main():
+    """ Builds out the Pet database
+    Drops all tables first, then rebuilds them"""
+    dbtables = ['person', 'pet', 'person_pet']
+
+    person_table = """
     CREATE TABLE IF NOT EXISTS person
   ( 
      id         INTEGER PRIMARY KEY, 
@@ -30,7 +45,7 @@ if __name__ == "__main__":
   ); 
     """
 
-    PET_TABLE = """
+    pet_table = """
     CREATE TABLE IF NOT EXISTS pet
   ( 
      id    INTEGER PRIMARY KEY, 
@@ -41,7 +56,7 @@ if __name__ == "__main__":
   ); 
     """
 
-    PERSON_PET_TABLE = """
+    person_pet_table = """
     CREATE TABLE IF NOT EXISTS person_pet
   ( 
      person_id INTEGER, 
@@ -49,8 +64,12 @@ if __name__ == "__main__":
   ); 
     """
 
-    DB_CONNECTION = create_connection('pets.db')
-    if DB_CONNECTION:
-        create_table(DB_CONNECTION, PERSON_TABLE)
-        create_table(DB_CONNECTION, PET_TABLE)
-        create_table(DB_CONNECTION, PERSON_PET_TABLE)
+    db_connection = create_connection('pets.db')
+    if db_connection:
+        reset_db(db_connection, dbtables)
+        create_table(db_connection, person_table)
+        create_table(db_connection, pet_table)
+        create_table(db_connection, person_pet_table)
+
+if __name__ == "__main__":
+    main()

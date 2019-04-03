@@ -73,10 +73,10 @@ def main():
                    (3, 'Sara', 'White', 27),
                    (4, 'William', 'Gibson', 23)]
     pet_data = [(1, 'Rusty', 'Dalmation', 4, 1),
-                (2, 'Bella', 'AlaskanMalamute', 3, 0),
-                (3, 'Max', 'CockerSpaniel', 1, 0),
+                (2, 'Bella', 'Alaskan Malamute', 3, 0),
+                (3, 'Max', 'Cocker Spaniel', 1, 0),
                 (4, 'Rocky', 'Beagle', 7, 0),
-                (5, 'Rufus', 'CockerSpaniel', 1, 0),
+                (5, 'Rufus', 'Cocker Spaniel', 1, 0),
                 (6, 'Spot', 'Bloodhound', 2, 1)]
     person_pet_data = [(1, 1),
                        (1, 2),

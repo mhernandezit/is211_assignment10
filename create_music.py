@@ -13,6 +13,9 @@ def create_connection(db_file):
     return None
 
 def build_db_from_sql(db_conn, filename):
+    """ Reads SQL from a file, and runs the commands
+    on the sql db connection.  Throws an exception if any
+    of the sql statements are invalid. """
     with open(filename) as s_file:
         sql = s_file.read()
         sql_statements = sql.split(';')
@@ -22,9 +25,9 @@ def build_db_from_sql(db_conn, filename):
             db_conn.execute(statement)
         except OperationalError, msg:
             print "Command skipped: ", msg
-        
+
 if __name__ == "__main__":
 
     DB_CONNECTION = create_connection('music.db')
     if DB_CONNECTION:
-        build_db_from_sql(DB_CONNECTION,'music.sql')
+        build_db_from_sql(DB_CONNECTION, 'music.sql')
