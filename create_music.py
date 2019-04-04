@@ -18,7 +18,7 @@ def build_db_from_sql(db_conn, filename):
     of the sql statements are invalid. """
     with open(filename) as s_file:
         sql = s_file.read()
-        sql_statements = sql.split(';')
+        sql_statements = sql.split(";")
 
     for statement in sql_statements:
         try:
@@ -28,6 +28,6 @@ def build_db_from_sql(db_conn, filename):
 
 if __name__ == "__main__":
 
-    DB_CONNECTION = create_connection('music.db')
+    DB_CONNECTION = create_connection("music.db")
     if DB_CONNECTION:
-        build_db_from_sql(DB_CONNECTION, 'music.sql')
+        build_db_from_sql(DB_CONNECTION, "music.sql")
