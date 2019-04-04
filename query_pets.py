@@ -17,10 +17,13 @@ def query_user_id(conn):
     forwards that ID to a select_person_by_id function"""
     user_id = 0
     while (user_id != -1) is True:
-        user_input = raw_input('Please enter a person ID: ')
+        user_input = raw_input("Please enter a person ID: ")
         try:
             user_id = int(user_input)
-            #select_person_by_id(conn, user_id)
+            if user_id == -1:
+                print "User entered -1 - exiting"
+                break
+            select_person_by_id(conn, user_id)
             select_pets_by_person(conn, user_id)
         except ValueError:
             print "Please enter an integer"
@@ -45,22 +48,32 @@ def select_pets_by_person(conn, person_id):
     cur = conn.cursor()
     try:
         cur.execute(sql, (person_id,))
+        data = cur.fetchall()
+        if data:
+            name = data[0][0]
+            print "\nQuerying for pets belonging to {}\n".format(name)
+        print sql_pp(cur, data)
     except OperationalError, msg:
-        print 'SQL error {} while running our code'.format(msg)
-    print sql_pp(cur)
+        print "SQL error {} while running our code".format(msg)
+
 
 def select_person_by_id(conn, person_id):
     """ Function to run a select statement, then print the results
     using our pretty printing function sql_pp """
-    sql = '''SELECT * FROM person WHERE id=?'''
+    sql = """SELECT * FROM person WHERE id=?"""
     cur = conn.cursor()
     try:
         cur.execute(sql, (person_id,))
+        data = cur.fetchall()
+        if data:
+            userid = (data[0][0])
+            print "\nQuerying for userID {}\n".format(userid)
+        print sql_pp(cur, data)
     except OperationalError, msg:
-        print 'SQL error {} while running our code'.format(msg)
-    print sql_pp(cur)
+        print "SQL error {} while running our code".format(msg)
 
-def sql_pp(cursor):
+
+def sql_pp(cursor, data):
     """ SQL Pretty printer - function to pull results from SQL cli
     and print out the results. Credit for this function goes to
     Steve Holden at
@@ -69,7 +82,6 @@ def sql_pp(cursor):
     Returns a string with the SQL query results
     """
     headers = cursor.description
-    data = cursor.fetchall()
     names = []
     lengths = []
     dividers = []
@@ -112,7 +124,7 @@ def sql_pp(cursor):
 
 def main():
     """ Main method to create our db connection then run the query """
-    pets = create_connection('pets.db')
+    pets = create_connection("pets.db")
     query_user_id(pets)
 
 if __name__ == "__main__":
